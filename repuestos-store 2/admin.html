@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin | Todo Importado</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-content">
+      <h1>Administrador - Todo Importado</h1>
+      <p>Panel de control seguro para gestionar productos, ventas y métricas.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="panel" id="loginPanel">
+      <h2>Login de administrador</h2>
+      <form id="loginForm" class="admin-form">
+        <input type="email" id="adminEmail" placeholder="Correo del administrador" required />
+        <input type="password" id="adminPassword" placeholder="Contraseña" required />
+        <button type="submit" class="btn btn-primary">Entrar</button>
+      </form>
+    </section>
+
+    <section class="dashboard" id="dashboard" style="display:none;">
+      <section class="panel">
+        <h2>Métricas de ventas</h2>
+        <div class="metric-grid">
+          <div class="metric">Ventas totales<strong id="metricSales">$0.00</strong></div>
+          <div class="metric">Pedidos<strong id="metricOrders">0</strong></div>
+          <div class="metric">Productos activos<strong id="metricProducts">0</strong></div>
+          <div class="metric">Stock bajo<strong id="metricLowStock">0</strong></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Productos</h2>
+        <div id="adminProductList" class="grid"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Crear producto</h2>
+        <form id="createProductForm" class="admin-form">
+          <input type="text" id="pName" placeholder="Nombre" required />
+          <input type="number" id="pPrice" placeholder="Precio" required />
+          <input type="number" id="pStock" placeholder="Stock" required />
+          <input type="text" id="pCategory" placeholder="Categoría" required />
+          <input type="text" id="pImage" placeholder="URL de imagen" required />
+          <textarea id="pDescription" placeholder="Descripción" required></textarea>
+          <button type="submit" class="btn btn-secondary">Guardar producto</button>
+        </form>
+      </section>
+
+      <section class="panel">
+        <h2>Seguridad del administrador</h2>
+        <ul>
+          <li>Usar contraseña fuerte</li>
+          <li>Activar autenticación con email y 2FA en Supabase</li>
+          <li>Restringir acceso a usuarios admin</li>
+          <li>Registrar cambios de productos</li>
+          <li>No exponer claves en el frontend</li>
+        </ul>
+      </section>
+    </dashboard>
+  </main>
+
+  <script src="admin.js"></script>
+</body>
+</html>

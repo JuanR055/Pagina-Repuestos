@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Todo Importado</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-content">
+      <h1>Todo Importado</h1>
+      <p>Repuestos y accesorios con disponibilidad, precios actualizados y métodos de pago en Venezuela e internacional.</p>
+      <a href="#catalogo" class="btn btn-primary">Ver catálogo</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="topbar">
+      <input type="text" id="searchInput" placeholder="Buscar repuesto, marca o categoría..." />
+      <div class="stats">
+        <span>Productos: <strong id="productCount">0</strong></span>
+        <span>Carrito: <strong id="cartCount">0</strong></span>
+      </div>
+    </section>
+
+    <section id="catalogo">
+      <h2>Catálogo de repuestos</h2>
+      <div id="productList" class="grid"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Carrito de compra</h2>
+      <div id="cartList" class="cart-list"></div>
+      <div class="total">
+        Total: $<span id="cartTotal">0.00</span>
+      </div>
+      <button class="btn btn-primary" id="checkoutBtn">Ir al checkout</button>
+    </section>
+
+    <section class="panel" id="checkoutSection" style="display:none;">
+      <h2>Checkout</h2>
+      <form id="checkoutForm" class="checkout-form">
+        <input type="text" id="customerName" placeholder="Nombre y apellido" required />
+        <input type="email" id="customerEmail" placeholder="Correo electrónico" required />
+        <input type="tel" id="customerPhone" placeholder="Teléfono / WhatsApp" required />
+        <textarea id="customerAddress" placeholder="Dirección de entrega" required></textarea>
+
+        <label for="paymentMethod">Método de pago</label>
+        <select id="paymentMethod" required>
+          <option value="">Selecciona un método</option>
+          <option value="Banesco">Transferencia Banesco</option>
+          <option value="Provincial">Transferencia Provincial</option>
+          <option value="Mercantil">Transferencia Mercantil</option>
+          <option value="BanescoPanama">Transferencia Banesco Panamá</option>
+          <option value="PagoMovil">Pago móvil</option>
+          <option value="Zelle">Zelle</option>
+          <option value="Binance">Binance</option>
+        </select>
+
+        <button type="submit" class="btn btn-primary">Confirmar pedido</button>
+      </form>
+
+      <div class="payment-info">
+        <h3>Datos de pago</h3>
+        <div id="paymentDetails"></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Botón de WhatsApp</h2>
+      <p>Después de confirmar el pedido, el cliente puede enviarte el comprobante por WhatsApp.</p>
+      <a id="whatsappBtn" class="btn btn-whatsapp" href="#" target="_blank">Enviar por WhatsApp</a>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© 2026 Todo Importado</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
