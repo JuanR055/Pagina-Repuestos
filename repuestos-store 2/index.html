@@ -5,12 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Todo Importado</title>
   <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js"></script>
 </head>
 <body>
   <header class="hero">
     <div class="hero-content">
       <h1>Todo Importado</h1>
-      <p>Repuestos y accesorios con disponibilidad, precios actualizados y métodos de pago en Venezuela e internacional.</p>
+      <p>Repuestos y accesorios con disponibilidad, precio actualizado y compra directa.</p>
       <a href="#catalogo" class="btn btn-primary">Ver catálogo</a>
     </div>
   </header>
@@ -30,11 +32,9 @@
     </section>
 
     <section class="panel">
-      <h2>Carrito de compra</h2>
+      <h2>Carrito</h2>
       <div id="cartList" class="cart-list"></div>
-      <div class="total">
-        Total: $<span id="cartTotal">0.00</span>
-      </div>
+      <div class="total">Total: $<span id="cartTotal">0.00</span></div>
       <button class="btn btn-primary" id="checkoutBtn">Ir al checkout</button>
     </section>
 
@@ -65,12 +65,6 @@
         <h3>Datos de pago</h3>
         <div id="paymentDetails"></div>
       </div>
-    </section>
-
-    <section class="panel">
-      <h2>Botón de WhatsApp</h2>
-      <p>Después de confirmar el pedido, el cliente puede enviarte el comprobante por WhatsApp.</p>
-      <a id="whatsappBtn" class="btn btn-whatsapp" href="#" target="_blank">Enviar por WhatsApp</a>
     </section>
   </main>
 

@@ -3,83 +3,54 @@ const paymentData = {
     title: "Transferencia Banesco",
     bank: "Banesco",
     holder: "Todo Importado",
-    account: "Coloca aquí tu número de cuenta Banesco",
-    note: "Enviar comprobante por WhatsApp al finalizar el pedido."
+    account: "Tu cuenta Banesco aquí",
+    note: "Enviar comprobante por WhatsApp."
   },
   Provincial: {
     title: "Transferencia Provincial",
     bank: "Banco Provincial",
     holder: "Todo Importado",
-    account: "Coloca aquí tu número de cuenta Provincial",
-    note: "Enviar comprobante por WhatsApp al finalizar el pedido."
+    account: "Tu cuenta Provincial aquí",
+    note: "Enviar comprobante por WhatsApp."
   },
   Mercantil: {
     title: "Transferencia Mercantil",
     bank: "Banco Mercantil",
     holder: "Todo Importado",
-    account: "Coloca aquí tu número de cuenta Mercantil",
-    note: "Enviar comprobante por WhatsApp al finalizar el pedido."
+    account: "Tu cuenta Mercantil aquí",
+    note: "Enviar comprobante por WhatsApp."
   },
   BanescoPanama: {
     title: "Transferencia Banesco Panamá",
     bank: "Banesco Panamá",
     holder: "Todo Importado",
-    account: "Coloca aquí tu cuenta de Banesco Panamá",
+    account: "Tu cuenta Banesco Panamá aquí",
     note: "Ideal para pagos internacionales."
   },
   PagoMovil: {
     title: "Pago móvil",
     bank: "Pago móvil",
     holder: "Todo Importado",
-    account: "Coloca aquí tu número de pago móvil",
-    note: "Incluye cédula, teléfono y referencia."
+    account: "Número y cédula aquí",
+    note: "Incluye referencia."
   },
   Zelle: {
     title: "Zelle",
     bank: "Zelle",
     holder: "Todo Importado",
-    account: "Coloca aquí tu correo Zelle",
-    note: "Confirma el monto exacto antes de pagar."
+    account: "Correo Zelle aquí",
+    note: "Confirma el monto exacto."
   },
   Binance: {
     title: "Binance",
     bank: "Binance",
     holder: "Todo Importado",
-    account: "Coloca aquí tu cuenta Binance / USDT",
-    note: "Indica red y monto exacto."
+    account: "Cuenta USDT aquí",
+    note: "Indica red y monto."
   }
 };
 
-let products = [
-  {
-    id: 1,
-    name: "Filtro de aceite",
-    price: 25,
-    stock: 12,
-    category: "Motor",
-    image: "https://via.placeholder.com/600x400?text=Filtro+de+aceite",
-    description: "Filtro para mantenimiento preventivo."
-  },
-  {
-    id: 2,
-    name: "Pastillas de freno",
-    price: 45,
-    stock: 0,
-    category: "Frenos",
-    image: "https://via.placeholder.com/600x400?text=Pastillas+de+freno",
-    description: "Juego delantero de alta durabilidad."
-  },
-  {
-    id: 3,
-    name: "Bujías",
-    price: 18,
-    stock: 7,
-    category: "Encendido",
-    image: "https://via.placeholder.com/600x400?text=Bujias",
-    description: "Bujías para distintos modelos de vehículo."
-  }
-];
-
+let products = [];
 let cart = [];
 
 const productList = document.getElementById("productList");
@@ -90,15 +61,29 @@ const productCount = document.getElementById("productCount");
 const searchInput = document.getElementById("searchInput");
 const checkoutSection = document.getElementById("checkoutSection");
 const paymentDetails = document.getElementById("paymentDetails");
-const whatsappBtn = document.getElementById("whatsappBtn");
+
+async function loadProducts() {
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("active", true)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  products = data;
+  renderProducts();
+}
 
 function renderProducts() {
   const query = searchInput.value.toLowerCase();
-
-  const filtered = products.filter(product =>
-    product.name.toLowerCase().includes(query) ||
-    product.category.toLowerCase().includes(query) ||
-    product.description.toLowerCase().includes(query)
+  const filtered = products.filter(p =>
+    p.name.toLowerCase().includes(query) ||
+    p.category.toLowerCase().includes(query) ||
+    p.description.toLowerCase().includes(query)
   );
 
   productCount.textContent = filtered.length;
@@ -109,7 +94,7 @@ function renderProducts() {
 
     productList.innerHTML += `
       <div class="card">
-        <img src="${product.image}" alt="${product.name}">
+        <img src="${product.image_url}" alt="${product.name}">
         <div class="card-body">
           <h3 class="product-title">${product.name}</h3>
           <div class="meta">${product.category}</div>
@@ -170,8 +155,10 @@ function showCheckout() {
   checkoutSection.scrollIntoView({ behavior: "smooth" });
 }
 
-function renderPaymentDetails(method) {
-  const data = paymentData[method];
+document.getElementById("checkoutBtn").addEventListener("click", showCheckout);
+
+document.getElementById("paymentMethod").addEventListener("change", function () {
+  const data = paymentData[this.value];
   if (!data) {
     paymentDetails.innerHTML = "";
     return;
@@ -180,21 +167,15 @@ function renderPaymentDetails(method) {
   paymentDetails.innerHTML = `
     <div class="payment-box">
       <h3>${data.title}</h3>
-      <p><strong>Banco / método:</strong> ${data.bank}</p>
+      <p><strong>Método:</strong> ${data.bank}</p>
       <p><strong>Titular:</strong> ${data.holder}</p>
-      <p><strong>Cuenta / dato:</strong> ${data.account}</p>
+      <p><strong>Cuenta:</strong> ${data.account}</p>
       <p><strong>Nota:</strong> ${data.note}</p>
     </div>
   `;
-}
-
-document.getElementById("checkoutBtn").addEventListener("click", showCheckout);
-
-document.getElementById("paymentMethod").addEventListener("change", function () {
-  renderPaymentDetails(this.value);
 });
 
-document.getElementById("checkoutForm").addEventListener("submit", function (e) {
+document.getElementById("checkoutForm").addEventListener("submit", async function (e) {
   e.preventDefault();
 
   if (cart.length === 0) {
@@ -202,41 +183,59 @@ document.getElementById("checkoutForm").addEventListener("submit", function (e) 
     return;
   }
 
-  const name = document.getElementById("customerName").value;
-  const email = document.getElementById("customerEmail").value;
-  const phone = document.getElementById("customerPhone").value;
-  const address = document.getElementById("customerAddress").value;
-  const paymentMethod = document.getElementById("paymentMethod").value;
+  const orderTotal = cart.reduce((sum, item) => sum + Number(item.price), 0);
 
-  if (!paymentMethod) {
-    alert("Selecciona un método de pago.");
+  const orderData = {
+    customer_name: document.getElementById("customerName").value,
+    customer_email: document.getElementById("customerEmail").value,
+    customer_phone: document.getElementById("customerPhone").value,
+    customer_address: document.getElementById("customerAddress").value,
+    payment_method: document.getElementById("paymentMethod").value,
+    total: orderTotal,
+    status: "pending"
+  };
+
+  const { data: order, error: orderError } = await supabase
+    .from("orders")
+    .insert(orderData)
+    .select()
+    .single();
+
+  if (orderError) {
+    alert("Error al guardar el pedido.");
+    console.error(orderError);
     return;
   }
 
-  const orderTotal = cart.reduce((sum, item) => sum + Number(item.price), 0);
+  const items = cart.map(item => ({
+    order_id: order.id,
+    product_id: item.id,
+    product_name: item.name,
+    price: item.price,
+    quantity: 1
+  }));
 
-  const orderText = `
-Pedido nuevo - Todo Importado
-Nombre: ${name}
-Email: ${email}
-Teléfono: ${phone}
-Dirección: ${address}
-Método de pago: ${paymentMethod}
-Total: $${orderTotal.toFixed(2)}
-Productos:
-${cart.map(item => `- ${item.name} ($${Number(item.price).toFixed(2)})`).join("\n")}
-  `.trim();
+  const { error: itemsError } = await supabase
+    .from("order_items")
+    .insert(items);
 
-  const whatsappNumber = "584141234567";
-  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(orderText)}`;
+  if (itemsError) {
+    alert("Error al guardar los productos del pedido.");
+    console.error(itemsError);
+    return;
+  }
 
-  whatsappBtn.href = whatsappUrl;
-  window.open(whatsappUrl, "_blank");
-
-  alert("Pedido generado. Ahora puedes enviar el comprobante por WhatsApp.");
+  alert("Pedido guardado correctamente.");
+  cart = [];
+  updateCart();
+  this.reset();
+  paymentDetails.innerHTML = "";
 });
 
-document.getElementById("searchInput").addEventListener("input", renderProducts);
+searchInput.addEventListener("input", renderProducts);
 
-renderProducts();
+loadProducts();
 updateCart();
+
+window.addToCart = addToCart;
+window.removeFromCart = removeFromCart;

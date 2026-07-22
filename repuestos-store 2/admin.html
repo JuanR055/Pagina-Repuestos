@@ -5,12 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin | Todo Importado</title>
   <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js"></script>
 </head>
 <body>
   <header class="hero">
     <div class="hero-content">
       <h1>Administrador - Todo Importado</h1>
-      <p>Panel de control seguro para gestionar productos, ventas y métricas.</p>
+      <p>Panel seguro para administrar publicaciones, imágenes, precios, stock y pedidos.</p>
     </div>
   </header>
 
@@ -24,9 +26,9 @@
       </form>
     </section>
 
-    <section class="dashboard" id="dashboard" style="display:none;">
+    <section id="dashboard" style="display:none;">
       <section class="panel">
-        <h2>Métricas de ventas</h2>
+        <h2>Métricas</h2>
         <div class="metric-grid">
           <div class="metric">Ventas totales<strong id="metricSales">$0.00</strong></div>
           <div class="metric">Pedidos<strong id="metricOrders">0</strong></div>
@@ -52,18 +54,7 @@
           <button type="submit" class="btn btn-secondary">Guardar producto</button>
         </form>
       </section>
-
-      <section class="panel">
-        <h2>Seguridad del administrador</h2>
-        <ul>
-          <li>Usar contraseña fuerte</li>
-          <li>Activar autenticación con email y 2FA en Supabase</li>
-          <li>Restringir acceso a usuarios admin</li>
-          <li>Registrar cambios de productos</li>
-          <li>No exponer claves en el frontend</li>
-        </ul>
-      </section>
-    </dashboard>
+    </section>
   </main>
 
   <script src="admin.js"></script>
